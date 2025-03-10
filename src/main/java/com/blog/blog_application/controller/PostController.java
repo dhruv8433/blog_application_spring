@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.blog_application.payload.ApiResponse;
 import com.blog.blog_application.payload.PostDto;
+import com.blog.blog_application.payload.PostResponse;
 import com.blog.blog_application.service.PostService;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -48,12 +49,12 @@ public class PostController {
     }
 
     // GET all posts
-    @GetMapping // apply pagination using path params
-    public ResponseEntity<List<PostDto>> getAllPosts(
+    @GetMapping // apply pagination using request params
+    public ResponseEntity<PostResponse> getAllPosts(
             @RequestParam(value = "page", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "size", defaultValue = "5", required = false) int pageSize) {
-        List<PostDto> posts = this.postService.getAllPost(pageNo, pageSize);
-        return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
+        PostResponse postResponse = this.postService.getAllPost(pageNo, pageSize);
+        return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
     }
 
     // GET by ID
