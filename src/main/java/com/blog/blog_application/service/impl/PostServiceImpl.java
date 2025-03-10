@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.blog.blog_application.errors.ResourceNotFoundException;
@@ -67,7 +70,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(int id) {
-        Post deletedPost = this.postRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "Id", id));
+        Post deletedPost = this.postRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", id));
 
         this.postRepo.delete(deletedPost);
     }
@@ -81,10 +85,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
-        List<Post> posts = this.postRepo.findAll();
+    public List<PostDto> getAllPost(int pageNo, int pageSize) {
+        Pageable p = PageRequest.of(pageNo, pageSize);
 
-        List<PostDto> postDtos = posts.stream().map(post -> {
+        Page<Post> posts = this.postRepo.findAll(p);
+        List<Post> allPosts = posts.getContent();
+
+        List<PostDto> postDtos = allPosts.stream().map(post -> {
             return this.ModelMapper.map(post, PostDto.class);
         }).collect(Collectors.toList());
 

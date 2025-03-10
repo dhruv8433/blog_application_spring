@@ -20,7 +20,7 @@ public interface PostService {
     PostDto getPostById(int id);
 
     // read all
-    List<PostDto> getAllPost();
+    List<PostDto> getAllPost(int pageNo, int pageSize);
 
     // read by user
     List<PostDto> getPostsByUser(int userId);
