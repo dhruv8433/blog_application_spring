@@ -66,20 +66,28 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto getPostById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPostById'");
+        Post post = this.postRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "Id", id));
+
+        PostDto postDtos = this.ModelMapper.map(post, PostDto.class);
+        return postDtos;
     }
 
     @Override
     public List<PostDto> getAllPost() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllPost'");
+        List<Post> posts = this.postRepo.findAll();
+
+        List<PostDto> postDtos = posts.stream().map(post -> {
+            return this.ModelMapper.map(post, PostDto.class);
+        }).collect(Collectors.toList());
+
+        return postDtos;
     }
 
     @Override
     public List<PostDto> getPostsByUser(int userId) {
-        User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", "Id", userId));
-        List<Post> posts = this.postRepo.findByUser(user); 
+        User user = this.userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("user", "Id", userId));
+        List<Post> posts = this.postRepo.findByUser(user);
 
         List<PostDto> postDtos = posts.stream().map(post -> {
             return this.ModelMapper.map(post, PostDto.class);
@@ -90,8 +98,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getPostsByCategory(int categoryId) {
-        Category cat = this.categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
-        List<Post> posts = this.postRepo.findByCategory(cat); 
+        Category cat = this.categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
+        List<Post> posts = this.postRepo.findByCategory(cat);
 
         List<PostDto> postDtos = posts.stream().map(post -> {
             return this.ModelMapper.map(post, PostDto.class);

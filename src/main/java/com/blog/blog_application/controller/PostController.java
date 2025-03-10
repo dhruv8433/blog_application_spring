@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.blog_application.payload.PostDto;
 import com.blog.blog_application.service.PostService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/post")
@@ -41,4 +43,17 @@ public class PostController {
         List<PostDto> posts = this.postService.getPostsByCategory(categoryId);
         return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
     }
+
+    // GET all posts
+    @GetMapping
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        List<PostDto> posts = this.postService.getAllPost();
+        return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getMethodName(@PathVariable int id) {
+        return new ResponseEntity<PostDto>(this.postService.getPostById(id), HttpStatus.OK); 
+    }
+    
 }
