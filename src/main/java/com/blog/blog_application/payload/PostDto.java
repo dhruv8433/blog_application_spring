@@ -17,7 +17,7 @@ public class PostDto {
     
     private String content;
     
-    private String postImage = "default.png";
+    private String postImage;
     
     private CategoryDto category;
     
