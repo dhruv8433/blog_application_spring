@@ -92,7 +92,6 @@ public class PostServiceImpl implements PostService {
         // ternary based on thhe sort direction property
         Sort sort = sortDir.equalsIgnoreCase("asc") ? sort = Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
 
-
         Pageable p = PageRequest.of(pageNo, pageSize, sort);
 
         Page<Post> posts = this.postRepo.findAll(p);
@@ -142,8 +141,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> searchPosts(String keyword) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchPosts'");
+        List<Post> posts = this.postRepo.findByTitleContaining(keyword);
+        List<PostDto> postDtos = posts.stream().map((post) -> this.ModelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return postDtos;
     }
 
 }
