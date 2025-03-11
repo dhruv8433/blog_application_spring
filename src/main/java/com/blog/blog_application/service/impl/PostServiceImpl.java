@@ -39,23 +39,33 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto createPost(PostDto postDto, int userId, int categoryId) {
-        // fetch user first
-        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-
-        // fetch category
+        // Fetch user
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+    
+        // Fetch category
         Category category = categoryRepo.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
-
-        Post post = this.ModelMapper.map(postDto, Post.class); // set title, content
-        post.setPostImage("default.png"); // set image
-        post.setAddedDate(new Date()); // set date
-        post.setUser(user); // set user
-        post.setCategory(category); // set category
-
+    
+        // Convert DTO to Entity
+        Post post = this.ModelMapper.map(postDto, Post.class);
+    
+        // Set additional fields
+        post.setAddedDate(new Date());
+        post.setUser(user);
+        post.setCategory(category);
+    
+        // Set image (if uploaded, it's already in postDto)
+        post.setPostImage(postDto.getPostImage());
+    
+        // Save post
         Post newPost = this.postRepo.save(post);
+    
+        // Convert entity back to DTO
         PostDto savedPost = this.ModelMapper.map(newPost, PostDto.class);
         return savedPost;
     }
+    
 
     @Override
     public PostDto updatePost(PostDto postDto, int id) {
