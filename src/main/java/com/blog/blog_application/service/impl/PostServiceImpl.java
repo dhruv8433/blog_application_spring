@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.blog.blog_application.errors.ResourceNotFoundException;
@@ -86,8 +87,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPost(int pageNo, int pageSize) {
-        Pageable p = PageRequest.of(pageNo, pageSize);
+    public PostResponse getAllPost(int pageNo, int pageSize, String sortBy, String sortDir) {
+
+        // ternary based on thhe sort direction property
+        Sort sort = sortDir.equalsIgnoreCase("asc") ? sort = Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+
+        Pageable p = PageRequest.of(pageNo, pageSize, sort);
 
         Page<Post> posts = this.postRepo.findAll(p);
         List<Post> allPosts = posts.getContent();
