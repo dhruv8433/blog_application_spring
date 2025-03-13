@@ -26,5 +26,5 @@ public class UserDto {
     private String password;
 
     @NotBlank(message = "Type cannot be empty")
-    private String type;
+    private String about;
 }
