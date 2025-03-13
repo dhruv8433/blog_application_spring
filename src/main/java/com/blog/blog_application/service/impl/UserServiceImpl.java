@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
-        user.setType(userDto.getType());
+        user.setAbout(userDto.getAbout());
 
         // save updated user and return it after converting into DTO
         User updatedUser = this.repository.save(user);
