@@ -4,8 +4,6 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.blog.blog_application.model.Comment;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
